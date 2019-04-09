@@ -1,138 +1,115 @@
-#include<stdio.h> 
-#define N 10 
-typedef struct 
-{ 
-	int process_id, arrival_time, burst_time, priority;
-	int q, ready; 
-}process_structure; 
-int Queue(int t1) 
-{ 
-	if (t1 == 0 || t1 == 1 || t1 == 2 || t1 == 3) 
-	{ 
-		return 1; 
-	} 
-	else
-	{
-		return 2; 
-	}
-} 
-void cal()
+#include<stdio.h>
+ 
+int main()
 {
-
-		int arrival_time[10], burst_time[10], temp[10];
-	int i, smallest, count = 0, time, limit;
-	double wait_time = 0, turnaround_time = 0, end;
-	float average_waiting_time, average_turnaround_time;
-	burst_time[9] = 9999;  
- 	for(time = 0; count != limit; time++)
- 	{
-   		smallest = 9;
-  		for(i = 0; i < limit; i++)
-  		{
-   			if(arrival_time[i] <= time && burst_time[i] < burst_time[smallest] && burst_time[i] > 0)
-			{
-   				smallest = i;
-			}
-  		}
-  		burst_time[smallest]--;
-  		if(burst_time[smallest] == 0)
-  		{
-   			count++;
-   			end = time + 1;
-   			wait_time = wait_time + end - arrival_time[smallest] - temp[smallest];
-   			turnaround_time = turnaround_time + end - arrival_time[smallest];
-  		}
- 	}
- 	
+      int i, limit, total = 0, x, counter = 0, time_quantum,j;
+     
+      int wait_time = 0, turnaround_time = 0,pos,z,p[10],prio[10], a_time[10], b_time[10], temp[10],b;
+     
+      float average_wait_time, average_turnaround_time;
+     
+      printf("\nEnter Total Number of Processes:");
+     
+      scanf("%d", &limit);
+     
+      x = limit;
+      for(i = 0; i < limit; i++)
+      {
+        p[i]=i+1;
+       
+        prio[i]=0;
+            printf("\nEnter total Details of Process[%d]\n", i + 1);
+            printf("Arrival Time:\t");
+            scanf("%d", &a_time[i]);
+            printf("Burst Time:\t");
+            scanf("%d", &b_time[i]);
+            temp[i] = b_time[i];
+      }
+       
+      printf("\nEnter the Time Quantum:");
+      scanf("%d", &time_quantum);
+      printf("\nProcess ID\t\tBurst Time\t Turnaround Time\t Waiting Time\t Priority\n");
+      for(total = 0, i = 0; x != 0;)
+      {
+ 
+            for(z=0;z<limit;z++)
+            {
+            int temp1;
+            pos=z;
+            for(j=z+1;j<limit;j++)
+            {
+                if(prio[j]<prio[pos])
+                pos=j;
+            }
+         
+        temp1=prio[z];
+   
+        prio[z]=prio[pos];
+   
+        prio[pos]=temp1;
+         
+            temp1=b_time[z];
+            b_time[z]=b_time[pos];
+            b_time[pos]=temp1;
+                    temp1=a_time[z];
+                a_time[z]=a_time[pos];
+            a_time[pos]=temp1;
+ 
+            temp1=p[z];
+                p[z]=p[pos];
+            p[pos]=temp1;
+ 
+            temp1=temp[z];
+                temp[z]=temp[pos];
+            temp[pos]=temp1;
+            }
+        {
+        }
+           
+            if(temp[i] <= time_quantum && temp[i] > 0)
+            {
+                  total = total + temp[i];
+                  temp[i] = 0;
+                  counter = 1;
+            }
+           
+            else if(temp[i] > 0)
+            {
+                  temp[i] = temp[i] - time_quantum;
+                  total = total + time_quantum;
+            }
+ 
+    for(b=0;b<limit;b++)
+        {
+            if(b==i)
+            prio[b]+=1;
+            else
+            prio[b]+=2;
+        }
+ 
+            if(temp[i] == 0 && counter == 1)
+            {
+                  x--;
+                  printf("\nProcess[%d]\t\t%d\t\t %d\t\t %d\t\t%d", p[i], b_time[i], total - a_time[i], total - a_time[i] - b_time[i],prio[i]);
+                  wait_time = wait_time + total - a_time[i] - b_time[i];
+                  turnaround_time = turnaround_time + total - a_time[i];
+                  counter = 0;
+            }
+            if(i == limit - 1)
+            {
+                  i = 0;
+           
+            }
+            else if(a_time[i + 1] <= total)
+            {
+                  i++;
+           
+            }
+            else
+            {
+                  i = 0;
+           
+            }      
+      }
+      return 0;
 }
-void display()
-{
-float average_waiting_time, average_turnaround_time;
-	/*int limit;
-		double wait_time = 0, turnaround_time = 0, end;
-average_waiting_time = wait_time / limit; 
-	average_turnaround_time = turnaround_time / limit;*/
- 	printf("\n\nAverage Waiting Time:\t%lf\n", average_waiting_time);
-    	printf("Average Turnaround Time:\t%lf\n", average_turnaround_time);	
-}
-
-
-
-
-
-int main() 
-{ 
-	int no_p, count, temp_process, time, j, y; 
-	process_structure temp; 
-	printf("Enter Total Number of Processes:\t"); 
-	scanf("%d", &no_p);  
-	process_structure process[no_p]; 
-	for(count = 0; count < no_p; count++) 
-	{ 
-		printf("\nProcess ID:\t"); 
-		scanf("%d", &process[count].process_id); 
-		printf("Arrival Time:\t"); 
-		scanf("%d", &process[count].arrival_time); 
-		printf("Burst Time:\t"); 
-		scanf("%d", &process[count].burst_time); 
-		printf("Process Priority:\t"); 
-		scanf("%d", &process[count].priority); 
-		temp_process = process[count].priority; 
-		process[count].q = Queue(temp_process);
-		process[count].ready = 0; 
-	}
-    time = process[0].burst_time; 
-	for(y = 0; y < no_p; y++) 
-	{ 
-		for(count = y; count < no_p; count++) 
-		{ 
-			if(process[count].arrival_time < time) 
-			{
- 				process[count].ready = 1; 
-			} 
-		} 
-    for(count = y; count < no_p - 1; count++) 
-		{
- 			for(j = count + 1; j < no_p; j++) 
-			{ 
-                if(process[count].ready == 1 && process[j].ready == 1) 
-				{ 
-                    if(process[count].q == 2 && process[j].q == 1) 
-					{ 
-						temp = process[count]; 
-						process[count] = process[j]; 
-						process[j] = temp; 
-					} }}}
-					for(count = y; count < no_p - 1; count++) 
-		{ 
-			for(j = count + 1; j < no_p; j++) 
-			{
-				if(process[count].ready == 1 && process[j].ready == 1) 
-				{ 
-					if(process[count].q == 1 && process[j].q == 1) 
-					{ 
-						if(process[count].burst_time > process[j].burst_time) 
-						{ 
-							temp = process[count]; 
-							process[count] = process[j]; 
-							process[j] = temp; 
-						} 
-						else 
-						{ 
-							break; 
-						} }}}}
-    printf("\nProcess[%d]:\tTime:\t%d To %d\n", process[y].process_id, time, time + process[y].burst_time); 
-	time = time + process[y].burst_time; 
-	for(count = y; count < no_p; count++) 
-	{ 
-		if(process[count].ready == 1) 
-		{ 
-			process[count].ready = 0; 
-		} 
-	} 
-	} 
-	cal();
-	display();
-	return 0; 
-}
-
