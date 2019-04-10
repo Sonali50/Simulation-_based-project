@@ -2,7 +2,7 @@
  
 int main()
 {
-      int i, limit, total = 0, x, counter = 0, time_quantum,j;
+      int i, limit, total = 0, x, counter = 0, time_quantum,j;    //declaring the variables
      
       int wait_time = 0, turnaround_time = 0,pos,z,p[10],prio[10], a_time[10], b_time[10], temp[10],b;
      
@@ -13,7 +13,7 @@ int main()
       scanf("%d", &limit);
      
       x = limit;
-      for(i = 0; i < limit; i++)
+      for(i = 0; i < limit; i++)     //taking the user input for the details of processes
       {
         p[i]=i+1;
        
@@ -26,7 +26,7 @@ int main()
             temp[i] = b_time[i];
       }
        
-      printf("\nEnter the Time Quantum:");
+      printf("\nEnter the Time Quantum:");     //time quantum for implementing round-robin
       scanf("%d", &time_quantum);
       printf("\nProcess ID\t\tBurst Time\t Turnaround Time\t Waiting Time\t Priority\n");
       for(total = 0, i = 0; x != 0;)
@@ -87,7 +87,7 @@ int main()
             prio[b]+=2;
         }
  
-            if(temp[i] == 0 && counter == 1)
+            if(temp[i] == 0 && counter == 1)    //calculating the turn around time and wating time
             {
                   x--;
                   printf("\nProcess[%d]\t\t%d\t\t %d\t\t %d\t\t%d", p[i], b_time[i], total - a_time[i], total - a_time[i] - b_time[i],prio[i]);
